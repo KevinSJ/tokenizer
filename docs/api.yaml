@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  title: Tokenizer API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/v1
+paths:
+  /tokenize:
+    post:
+      summary: Create a list of tokens based on a collection of payment card or bank numbers
+      requestBody:
+        description: A JSON array of plain account/bank card numbers
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlainAccountNumbers'
+      responses:
+        '200': # status code
+          description: A JSON array of tokenized account/bank card numbers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400': # status code
+          description: Bad Request, check all the inputs are valid.
+  /detokenize:
+    post:
+      summary: Create a list of plain account numbers from tokenized strings
+      requestBody:
+        description: A JSON array of tokenized strings
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tokenizedAccountNumbers'
+      responses:
+        '200': # status code
+          description: A JSON array of plain text account/bank card numbers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlainAccountNumbers'
+        '400': # status code
+          description: Bad Request, check all the inputs are valid.
+
+components:
+  schemas:
+    PlainAccountNumbers:
+      type: array
+      items:
+        type: string
+        pattern: (\d[-]*?){16}
+    tokenizedAccountNumbers:
+      type: array
+      items:
+        type: string
