@@ -9,7 +9,7 @@
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest --run-in-band",
     "test:watch": "NODE_OPTIONS='--experimental-vm-modules' jest --run-in-band --watch",
     "test:coverage": "NODE_OPTIONS='--experimental-vm-modules' jest --run-in-band --coverage",
-    "lint": "eslint . && prettier .",
+    "lint": "eslint --fix --ext .js && prettier .",
     "dev": "node --watch index.js",
     "docker:build": "docker build --tag node-tokenizer .",
     "docker": "docker run -p=3000:3000 node-tokenizer:latest"

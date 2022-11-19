@@ -1,8 +1,8 @@
-import loki from 'lokijs';
+import loki from "lokijs";
 
-const db = new loki('token');
+const db = new loki("token");
 
-const tokenCollection = db.addCollection('tokens', {
+const tokenCollection = db.addCollection("tokens", {
   autoupdate: true,
 });
 
