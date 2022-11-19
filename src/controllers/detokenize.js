@@ -1,12 +1,12 @@
-import express from 'express';
-import { validateBody } from '../middlewares/validator.js';
-import tokenStorage from '../repositories/tokenStorage.js';
+import express from "express";
+import { validateBody } from "../middlewares/validator.js";
+import tokenRepository from "../repositories/tokenRepository.js";
 
 const router = express.Router();
 
-router.post('/', validateBody, (req, res) => {
+router.post("/", validateBody, (req, res) => {
   const tokens = req.body;
-  const pans = tokenStorage.getPanBy(tokens);
+  const pans = tokenRepository.getPanBy(tokens);
 
   return res.send(pans);
 });

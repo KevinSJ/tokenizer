@@ -1,18 +1,24 @@
-const { createHash, randomBytes } = await import('node:crypto');
+const { createHash, randomBytes } = await import("node:crypto");
 
-const tokenize = (/** @type {string} */ plainTextPAN) => {
-  if (typeof plainTextPAN === 'string' && plainTextPAN) {
-    const hash = createHash('SHA256');
-    const generatedRandomBytes = randomBytes(4);
+const tokenizer = {
+  /**
+   * @param {any} plainTextPAN
+   */
+  tokenize(plainTextPAN) {
+    if (typeof plainTextPAN === "string" && plainTextPAN.length > 0) {
+      const hash = createHash("SHA256");
+      const generatedRandomBytes = randomBytes(4);
 
-    hash.update(plainTextPAN);
-    hash.update(generatedRandomBytes);
+      hash.update(plainTextPAN, "utf8");
+      hash.update(generatedRandomBytes);
 
-    const token = hash.copy().digest('hex').slice(0, plainTextPAN.length);
+      const token = hash.copy().digest("hex");
 
-    return token;
-  }
-  throw new Error('Incorrect input format for PAN');
+      return token.slice(0, plainTextPAN.length);
+    }
+
+    throw new Error("Incorrect input format for PAN");
+  },
 };
 
-export { tokenize };
+export default tokenizer;

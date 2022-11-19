@@ -1,7 +1,7 @@
-import { tokenCollection } from '../connectors/dbConnector.js';
-import { tokenize } from '../util/tokenizer.js';
+import { tokenCollection } from "../connectors/dbConnector.js";
+import tokenizer from "../util/tokenizer.js";
 
-const tokenStorage = {
+const tokenRepository = {
   /**
    * @param {string} plainTextPan
    * @returns {string|null}
@@ -17,7 +17,7 @@ const tokenStorage = {
    */
   generateTokensFor(plainTextPans) {
     const generatedTokens = plainTextPans.map((pan) => {
-      const token = this.getTokensBy(pan) ?? generateAndInsertToken(pan);
+      const token = this.getTokensBy(pan) ?? this.generateAndInsertToken(pan);
 
       return token;
     });
@@ -34,14 +34,18 @@ const tokenStorage = {
       .find({ token: { $in: tokens } })
       .map(({ pan }) => pan);
   },
+
+  /**
+   * @param {string} pan
+   * @returns {string} the generated token
+   */
+  generateAndInsertToken(pan) {
+    const token = tokenizer.tokenize(pan);
+
+    tokenCollection.insert({ token, pan });
+
+    return token;
+  },
 };
 
-const generateAndInsertToken = (pan) => {
-  const token = tokenize(pan);
-
-  tokenCollection.insert({ token, pan });
-
-  return token;
-};
-
-export default tokenStorage;
+export default tokenRepository;
