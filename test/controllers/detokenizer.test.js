@@ -21,6 +21,18 @@ describe("detokenize service", () => {
       expect(res.status).toBe(400);
       expect(res.text).toBe("Request body can not be empty");
     });
+
+    it("- Should return 404 if any of the tokens not exist in token storage", async function () {
+      sinon
+        .stub(tokenRepository, "getPanBy")
+        .callsFake(sinon.fake.returns(["5-4-3-2-1"]));
+      const res = await supertest(server)
+        .post("/detokenize")
+        .send(["1-2-3-4-5", "5-4-3-2-1", "6-5-4-3-2-1"]);
+
+      expect(res.status).toBe(404);
+      expect(res.text).toBe("Token not found");
+    });
   });
 
   describe("Happy Path", () => {
